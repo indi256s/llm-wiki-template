@@ -1,10 +1,10 @@
-# LLM-Wiki: Personal Exocortex
+# LLM-Wiki
 
 A template and architecture for maintaining a knowledge base in Obsidian, where AI acts as an editor and writer rather than just a search engine.
 
 This approach synthesizes ideas from three authors: the core concept of an LLM-wiki in plain Markdown belongs to Andrej Karpathy. The semantic directory structure is borrowed from Farzaa. The "Lineage" rule (mandatory linking of all facts to source files in `raw/`) is adopted from Brad Groux's methodology.
 
-No complex RAG pipelines, vector databases, or embeddings. The entire wiki is a set of plain text files. Modern models with massive context windows (Gemini 1.5/3.1 Pro, Claude 3.5/4.6 Sonnet) can easily ingest millions of tokens at once. It's simpler and more reliable to feed them the entire text.
+No complex RAG pipelines, vector databases, or embeddings. The entire wiki is a set of plain text files. Modern models with massive context windows can easily ingest millions of tokens at once. It's simpler and more reliable to feed them the entire text.
 
 ## How it works physically
 
