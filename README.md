@@ -119,9 +119,9 @@ All devices and the AI agent sync via a single Git repository. Best for users co
 
 ---
 
-### Option B: Hybrid (Obsidian Sync + Git Bridge)
+### Option B: Obsidian Sync + Headless Client
 
-Mobile devices and PCs sync via native Obsidian Sync. The PC additionally pushes to a private Git repository, from which the AI agent pulls and pushes.
+All devices sync via native Obsidian Sync. The AI agent uses [Obsidian Headless](https://obsidian.md/help/sync/headless) — an official CLI client that connects directly to Obsidian Sync without the desktop app. No Git involved.
 
 **Setup:**
 
@@ -133,21 +133,39 @@ Mobile devices and PCs sync via native Obsidian Sync. The PC additionally pushes
    - Connect all devices to the same remote vault.
    - Edits on phone appear on desktop instantly, and vice versa.
 
-3. **Desktop Git Bridge:**
-   - On the desktop machine, install the [Obsidian Git](https://github.com/denolehov/obsidian-git) community plugin.
-   - Configure it to auto-commit and push on a schedule (e.g., every 10 minutes).
-   - This makes the desktop act as a bridge: Obsidian Sync keeps human devices in sync, and the Git plugin pushes to the repo for the AI.
-
-4. **AI Agent (Server/Cloud):**
-   - Same as Option A: the agent clones the repo, pulls, processes, commits, and pushes.
-   - When the desktop pulls the AI's changes from Git, Obsidian Sync automatically propagates them to mobile.
+3. **AI Agent (Server/Cloud):**
+   - Install the headless client:
+     ```bash
+     npm install -g obsidian-headless
+     ```
+   - Log in and connect to the vault:
+     ```bash
+     ob login
+     ob sync-setup --vault "My Vault" --path ~/my-wiki
+     ```
+   - Configure for the agent's use case — the agent only needs to read `raw/` and write to `wiki/`:
+     ```bash
+     ob sync-config --mode bidirectional
+     ```
+   - Run a one-time sync before and after processing:
+     ```bash
+     ob sync                    # pull latest
+     # ... agent processes raw/entries/, writes to wiki/ ...
+     ob sync                    # push changes
+     ```
+   - Or run continuous sync in the background:
+     ```bash
+     ob sync --continuous
+     ```
 
 **Data flow:**
 ```
-Phone  <--Obsidian Sync-->  Desktop  <--Git-->  GitHub  <--Git-->  AI Agent
+Phone  <--Obsidian Sync-->  Desktop
+                  \
+                   `--Obsidian Sync-->  AI Agent (obsidian-headless)
 ```
 
-**Pros:** Seamless mobile experience. No Git apps needed on the phone. The AI operates in an isolated Git loop and does not interfere with native phone sync.
+**Pros:** Seamless experience on all devices. No Git setup needed anywhere. End-to-end encryption. The AI agent is just another Obsidian Sync device.
 **Cons:** Requires a paid Obsidian Sync subscription (~$4/month billed annually).
 
 ---

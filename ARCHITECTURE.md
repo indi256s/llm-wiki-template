@@ -46,10 +46,10 @@ All devices work with a single Git repository.
 * **Diagram:** Mobile (Working Copy + Obsidian) <-> GitHub <-> Desktop (Obsidian Git) <-> AI Agent.
 * **Notes:** Requires setting up Git clients on mobile devices. Merge conflicts are possible if the AI agent pushes changes while the user is editing a file on their phone offline.
 
-### Option B: Hybrid (Obsidian Sync + Git Bridge)
-Separation of layers: human (native Sync) and machine (Git).
-* **Human Layer (Obsidian Sync):** Phone and Desktop communicate instantly via native paid Obsidian Sync. No merge conflicts. The user simply drops a thought into `raw/` on the go.
-* **AI Layer (Git Bridge):** The Desktop, using the Obsidian Git plugin, acts as a bridge — auto-pushing folders to a private Git repository. The AI agent (server) pulls files from there, works as an AI writer, commits rewritten articles to `wiki/`, and pushes back to GitHub. The Desktop pulls changes from Git, and native Sync immediately sends the finished article back to the phone.
+### Option B: Obsidian Sync + Headless Client
+All devices, including the AI agent, sync via native Obsidian Sync. No Git involved.
+* **Human Devices (Obsidian Sync):** Phone and Desktop communicate instantly via native paid Obsidian Sync. No merge conflicts. The user simply drops a thought into `raw/` on the go.
+* **AI Agent ([Obsidian Headless](https://obsidian.md/help/sync/headless)):** The AI agent server runs `obsidian-headless`, an official CLI client that connects directly to Obsidian Sync without the desktop app. The agent runs `ob sync` before processing to pull the latest entries, writes to `wiki/`, then runs `ob sync` again to push changes. All devices receive updates through Obsidian Sync. Supports end-to-end encryption.
 
 ---
 
